@@ -1,20 +1,20 @@
 import cv2
 import pywt
 import numpy as np
-from skimage.util import view_as_windows
-from scipy.stats import entropy
-from scipy.ndimage import convolve
-from scipy.ndimage import gaussian_filter, convolve
 from scipy.linalg import lstsq
+from scipy.stats import entropy, kurtosis
 from skimage.util import view_as_windows
+from scipy.ndimage import convolve, gaussian_filter
+
+
 from joblib import Parallel, delayed
-from scipy.stats import kurtosis
 
 
 def is_blurry(img_path, threshold=100):
     image = cv2.imread(img_path,cv2.IMREAD_GRAYSCALE)
     variance = cv2.Laplacian(image,cv2.CV_64F).var()
     return variance
+
 
 def blur_kurtosis(image_path):
     # Read the image in grayscale
@@ -62,6 +62,7 @@ def mten_focus_measure(image_path):
     
     return mten_value
 
+
 def mxml_focus_measure(image_path):
     # Read the image in grayscale
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
@@ -85,7 +86,13 @@ def mxml_focus_measure(image_path):
     
     return MXML_value
 
+
 def variance_of_laplacian(image_path):
+    """
+    Calculates the variance of an image's laplacian
+    :param image_path: path to image file
+    :returns mvl_value: variance of laplacian
+    """
     # Read the image in grayscale
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
@@ -102,17 +109,14 @@ def variance_of_laplacian(image_path):
     
     return mvl_value
 
+
 def calculate_msvd_blur(image_path, window_size=3, k=2):
     """
     Calculates the MSVD blur measure for an image.
-    
-    Parameters:
-    - image: np.array, the input grayscale image
-    - window_size: int, the size of the neighborhood window (e.g., 3 for a 3x3 window)
-    - k: int, the number of largest singular values to consider
-    
-    Returns:
-    - blur_map: np.array, blur measure for each pixel in the image
+    :param image_path: path to image file
+    :param window_size: int, the size of the neighborhood window (e.g., 3 for a 3x3 window)
+    :param k: int, the number of largest singular values to consider
+    :return blur_map: np.array, blur measure for each pixel in the image
     """
     # Ensure image is grayscale
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
@@ -149,13 +153,9 @@ def calculate_msvd_blur(image_path, window_size=3, k=2):
 def calculate_histogram_entropy(patch, num_bins=20):
     """
     Calculate the histogram entropy for a given patch.
-    
-    Parameters:
-    - patch: np.array, the input image patch (grayscale).
-    - num_bins: int, the number of bins for the histogram (default is 256 for 8-bit images).
-    
-    Returns:
-    - entropy_value: float, the entropy of the histogram for the patch.
+    :param patch: np.array, the input image patch (grayscale).
+    :param num_bins: int, the number of bins for the histogram (default is 256 for 8-bit images).
+    :return entropy_value: float, the entropy of the histogram for the patch.
     """
     # Calculate the histogram of the patch
     hist, _ = np.histogram(patch, bins=num_bins, range=(0, 256), density=True)
@@ -169,16 +169,11 @@ def calculate_histogram_entropy(patch, num_bins=20):
 def calculate_blurriness_entropy(image_path, window_size=5, num_bins=20):
     """
     Calculates a single blurriness score for an image based on histogram entropy.
-    
-    Parameters:
-    - image: np.array, the input grayscale image.
-    - window_size: int, size of the neighborhood window.
-    - num_bins: int, number of bins for the histogram.
-    
-    Returns:
-    - blurriness_score: float, the average entropy across all patches as a measure of blurriness.
+    :param- image_path: path to image file
+    :param window_size: int, size of the neighborhood window.
+    :param num_bins: int, number of bins for the histogram.
+    :return blurriness_score: float, the average entropy across all patches as a measure of blurriness.
     """
-    print("1")
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     # Ensure image is grayscale
     if len(image.shape) == 3:
@@ -200,16 +195,11 @@ def calculate_blurriness_entropy(image_path, window_size=5, num_bins=20):
     return blurriness_score
 
 
-
 def calculate_blurriness_fft(image_path):
     """
     Calculates a blurriness score based on the Fast Fourier Transform (FFT) of the image.
-    
-    Parameters:
-    - image: np.array, the input grayscale image.
-    
-    Returns:
-    - blurriness_score: float, a score where lower values indicate more blurriness.
+    :param image_path: path to image file
+    :return blurriness_score: float, a score where lower values indicate more blurriness.
     """
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
@@ -241,13 +231,9 @@ def calculate_blurriness_fft(image_path):
 def calculate_blurriness_wavelet(image_path, wavelet='db1'):
     """
     Calculates a blurriness score for an image based on the sum of the wavelet coefficients.
-    
-    Parameters:
-    - image: np.array, the input grayscale image.
-    - wavelet: str, the type of wavelet to use (default is 'db1').
-    
-    Returns:
-    - blurriness_score: float, the sum of the absolute wavelet coefficients in the detail sub-bands.
+    :params image_path: path to image file
+    :param wavelet: str, the type of wavelet to use (default is 'db1').
+    :returns blurriness_score: float, the sum of the absolute wavelet coefficients in the detail sub-bands.
     """
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     # Ensure the image is grayscale
@@ -268,13 +254,9 @@ def calculate_blurriness_wavelet(image_path, wavelet='db1'):
 def calculate_contrast_operator(image_path, window_size=3):
     """
     Calculates a blurriness score based on Nanda et al.'s contrast operator.
-    
-    Parameters:
-    - image: np.array, the input grayscale image.
-    - window_size: int, the size of the neighborhood window (default is 3x3).
-    
-    Returns:
-    - blurriness_score: float, the average contrast across all pixels as a measure of blurriness.
+    :params image_path: path to image file
+    :param window_size: int, the size of the neighborhood window (default is 3x3).
+    :return blurriness_score: float, the average contrast across all pixels as a measure of blurriness.
     """
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
 
@@ -299,12 +281,8 @@ def calculate_contrast_operator(image_path, window_size=3):
 def calculate_patch_curvature(window):
     """
     Calculate the curvature measure for a given patch.
-    
-    Parameters:
-    - window: np.array, the input image patch.
-    
-    Returns:
-    - curvature_measure: float, the curvature measure for the patch.
+    :param window: np.array, the input image patch.
+    :returns curvature_measure: float, the curvature measure for the patch.
     """
     # Set up a system of equations for quadratic fitting
     window_size = window.shape[0]
@@ -323,16 +301,12 @@ def calculate_patch_curvature(window):
 
 def calculate_blurriness_curvature(image_path, window_size=5, stride=3, num_jobs=-1):
     """
-    Calculates a blurriness score based on the curvature operator.
-    
-    Parameters:
-    - image: np.array, the input grayscale image.
-    - window_size: int, size of the neighborhood window.
-    - stride: int, the step size for sampling patches.
-    - num_jobs: int, number of parallel jobs (use -1 for all available CPUs).
-    
-    Returns:
-    - blurriness_score: float, the average curvature across sampled patches as a measure of blurriness.
+    Calculates a blurriness score based on the curvature operator
+    :params image_path :path to image file
+    :param window_size: int, size of the neighborhood window.
+    :param stride: int, the step size for sampling patches.
+    :param num_jobs: int, number of parallel jobs (use -1 for all available CPUs).
+    :return blurriness_score: float, the average curvature across sampled patches as a measure of blurriness.
     """
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     # Ensure the image is grayscale
@@ -353,17 +327,14 @@ def calculate_blurriness_curvature(image_path, window_size=5, stride=3, num_jobs
     
     return blurriness_score
 
+
 def steerable_filter_responses(image, sigma=1, num_orientations=4):
     """
     Apply steerable filters to an image and get the maximum response across orientations.
-    
-    Parameters:
-    - image: np.array, the input grayscale image.
-    - sigma: float, the standard deviation for the Gaussian kernel.
-    - num_orientations: int, the number of orientations for the filters.
-    
-    Returns:
-    - max_response: np.array, the maximum filter response for each pixel.
+    :param image: np.array, the input grayscale image.
+    :param sigma: float, the standard deviation for the Gaussian kernel.
+    :param num_orientations: int, the number of orientations for the filters.
+    :returns max_response: np.array, the maximum filter response for each pixel.
     """
     # Define orientations
     angles = np.linspace(0, np.pi, num_orientations, endpoint=False)
@@ -383,17 +354,14 @@ def steerable_filter_responses(image, sigma=1, num_orientations=4):
     max_response = np.max(np.stack(responses, axis=-1), axis=-1)
     return max_response
 
+
 def calculate_blurriness_steerable(image_path, sigma=1, num_orientations=4):
     """
     Calculates a blurriness score for an image using steerable filters.
-    
-    Parameters:
-    - image: np.array, the input grayscale image.
-    - sigma: float, the standard deviation for the Gaussian kernel.
-    - num_orientations: int, the number of orientations for the filters.
-    
-    Returns:
-    - blurriness_score: float, the sum of the maximum responses as a measure of blurriness.
+    :param image_path: path to image
+    :param sigma: float, the standard deviation for the Gaussian kernel.
+    :param num_orientations: int, the number of orientations for the filters.
+    :returns blurriness_score: float, the sum of the maximum responses as a measure of blurriness.
     """
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     # Ensure the image is grayscale

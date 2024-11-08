@@ -1,6 +1,6 @@
 import os
 import cv2
-from src.utils.other_utils import mkdir_p
+from src.utils.files import mkdir_p
 from random import shuffle
 from matplotlib import pyplot as plt
 import seaborn as sns
