@@ -7,7 +7,7 @@ import pandas as pd
 
 from src.utils.models import load_model
 from src.utils.files import list_imgs_files
-from src.algorithms.blur import is_blurry, blur_kurtosis, calculate_gradient_energy, mten_focus_measure, mxml_focus_measure, variance_of_laplacian, calculate_msvd_blur, calculate_blurriness_entropy, calculate_blurriness_fft, calculate_blurriness_wavelet, calculate_contrast_operator,calculate_blurriness_steerable
+from src.algorithms.blur import blur_kurtosis, calculate_gradient_energy, mten_focus_measure, mxml_focus_measure, variance_of_laplacian, calculate_msvd_blur, calculate_blurriness_entropy, calculate_blurriness_fft, calculate_blurriness_wavelet, calculate_contrast_operator,calculate_blurriness_steerable
 
 
 #Functions to be computed measuring the bluriness of the image

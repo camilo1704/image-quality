@@ -1,22 +1,20 @@
 import cv2
 import pywt
 import numpy as np
+from joblib import Parallel, delayed
+
 from scipy.linalg import lstsq
 from scipy.stats import entropy, kurtosis
 from skimage.util import view_as_windows
 from scipy.ndimage import convolve, gaussian_filter
 
 
-from joblib import Parallel, delayed
-
-
-def is_blurry(img_path, threshold=100):
-    image = cv2.imread(img_path,cv2.IMREAD_GRAYSCALE)
-    variance = cv2.Laplacian(image,cv2.CV_64F).var()
-    return variance
-
-
 def blur_kurtosis(image_path):
+    """
+    Calculates the kurtosis of the Laplacian of an image, serving as a statistical measure of its sharpness.
+    :param image_path: Path to the image file
+    :returns kurtosis_value: Kurtosis of the Laplacian values; higher values generally indicate sharper images.
+    """
     # Read the image in grayscale
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
@@ -33,6 +31,11 @@ def blur_kurtosis(image_path):
 
 
 def calculate_gradient_energy(image_path):
+    """
+    Calculates the Gradient Energy of an image, indicating its overall edge strength.
+    :param image_path: Path to the image file 
+    :return  gradient_energy: Total gradient energy, with higher values indicating stronger edges.
+    """
     # Read the image in grayscale
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
@@ -47,7 +50,14 @@ def calculate_gradient_energy(image_path):
     
     return gradient_energy
 
+
 def mten_focus_measure(image_path):
+    """
+    Calculates the Modified Tenengrad (MTEN) focus metric for an image,
+    providing a measure of its sharpness.
+    :param image_path: Path to the image file (in grayscale or converted to grayscale).
+    :return  mten_value: Focus measure, with higher values indicating sharper images.
+    """
     # Read the image in grayscale
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
@@ -64,6 +74,12 @@ def mten_focus_measure(image_path):
 
 
 def mxml_focus_measure(image_path):
+    """
+    Calculates the Maximum Cross-Sectional Measure of Laplacian (MXML) focus metric for an image,
+    indicating its sharpness.
+    :param image_path: Path to the image file 
+    :return MXML_value: Focus measure, with higher values indicating sharper images.
+    """
     # Read the image in grayscale
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
     if image is None:
