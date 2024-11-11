@@ -76,3 +76,7 @@ ATTRIBUTES = {
             "x_limits_for_distribution_graph": None
         },
     }
+
+
+def get_algorithmic_clustering_attributes():
+    return ATTRIBUTES

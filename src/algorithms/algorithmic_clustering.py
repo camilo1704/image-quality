@@ -15,9 +15,13 @@ To add a new method, add it to utils.image_attributes_score_algorithms and use i
 
 import json
 import os
-from src.utils.other_utils import mkdir_p, get_image_paths
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+from src.utils.files import mkdir_p, get_image_paths
 from src.utils.graphs import grid_of_cluster_examples, image_attribute_score_distribution
-from src.algorithmic_clustering_config import *
+from src.algorithms.algorithmic_clustering_config import get_algorithmic_clustering_attributes
 
 
 def categorize_images_with_thresholds(attribute_results_float32, thresholds, labels):
@@ -59,11 +63,12 @@ def image_attribute_scores(dataset_image_paths, attribute_name, threshold_labels
     """
     results = []
     file_path = os.path.join(output_path, "score_results", f"{attribute_name.lower().replace(' ', '_')}_results.json")
-
+    print("attribute  ", attribute_name)
     if not os.path.exists(file_path):
         for im_path in dataset_image_paths:
             try:
                 result = [im_path, measure_function(im_path)]
+                print(im_path, measure_function(im_path))
                 results.append(result)
             except Exception:
                 print(f"Exception on path {im_path}")
@@ -101,6 +106,7 @@ if __name__ == '__main__':
     image_paths = get_image_paths(args.images_path)
 
     mkdir_p(os.path.join(output_path, "score_results"))
+    ATTRIBUTES = get_algorithmic_clustering_attributes()
     attribute_degrees = {}
     for an_name, attribute_data in ATTRIBUTES.items():
         attribute_degrees[an_name] = image_attribute_scores(image_paths, an_name, attribute_data["labels"],
