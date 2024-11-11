@@ -22,24 +22,7 @@ git clone https://github.com/camilo1704/image-quality.git
 pip install -r requirements.txt
 
 ## Project Structure
-├── src/                                # Main source code
-    ├── algorithms/                     # Algorithms for tagging images
-        ├── algorithmic_clustering.py   
-        └── blur.py                     
-    ├── data_processing/                # Helping functions 
-        └── compute_blur.py             
-    ├── models/                         # Model training scripts and feature extractions methods
-        ├── blur_model.py               
-        ├── feature_extractors.py       
-        └── image_attributes.py         
-    ├── utils/                          # Helping functions
-        ├── files.py                    
-        ├── graphs.py                  
-        └── models.py                   
-├── main.py                             # Main Script for tagging images
-├── requirements.txt                    # Requirements file
-└── README.md                           # Project README
-
+├── src/ # Main source code │ ├── algorithms/ # Algorithms for tagging images │ │ ├── algorithmic_clustering.py │ │ └── blur.py │ ├── data_processing/ # Helper functions for data processing │ │ └── compute_blur.py │ ├── models/ # Model training scripts and feature extraction methods │ │ ├── blur_model.py │ │ ├── feature_extractors.py │ │ └── image_attributes.py │ ├── utils/ # Utility functions │ │ ├── files.py │ │ ├── graphs.py │ │ └── models.py │ └── main.py # Main script for tagging images ├── requirements.txt # Requirements file └── README.md # Project README
 ## Dataset
 To train the blur model, 2 folders with blur and normal images need to be provided. 
 
