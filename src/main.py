@@ -3,8 +3,7 @@ import json
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from src.utils.other_utils import mkdir_p, get_image_paths
+from src.utils.files import mkdir_p, get_image_paths, convert_to_serializable
 from src.algorithms.algorithmic_clustering import image_attribute_scores
 from src.algorithms.algorithmic_clustering_config import get_algorithmic_clustering_attributes
 
@@ -26,7 +25,7 @@ if __name__ == '__main__':
     blur_artifacts_path = args.blur_artifacts_path
     result_dict = compute_blur_from_model(image_paths, blur_artifacts_path)
     image_paths = get_image_paths(args.images_path)
-
+    print(result_dict)
     score_results_path = os.path.join(os.path.join(output_path, "score_results"))
     mkdir_p(score_results_path)
     attribute_degrees = {}
@@ -54,4 +53,8 @@ if __name__ == '__main__':
     for img_arr in aspect_ratio_results:
         img_path, value = img_arr
         result_dict[img_path]["long"] = 1 if value>3.45 else 0
+
+    with open(os.path.join(score_results_path,"results_dict.json"), "w") as json_file:
+        json.dump(result_dict, json_file, indent=4, default=convert_to_serializable) 
+
 
