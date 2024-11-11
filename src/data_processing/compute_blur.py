@@ -1,13 +1,15 @@
-import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
+import sys
 import joblib
 import pandas as pd
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from src.utils.models import load_model
 from src.utils.files import list_imgs_files
-from src.algorithms.blur import blur_kurtosis, calculate_gradient_energy, mten_focus_measure, mxml_focus_measure, variance_of_laplacian, calculate_msvd_blur, calculate_blurriness_entropy, calculate_blurriness_fft, calculate_blurriness_wavelet, calculate_contrast_operator,calculate_blurriness_steerable
+from src.algorithms.blur import (blur_kurtosis, calculate_gradient_energy, mten_focus_measure,
+                                 mxml_focus_measure, variance_of_laplacian, calculate_msvd_blur,
+                                 calculate_blurriness_entropy, calculate_blurriness_fft, calculate_blurriness_wavelet,
+                                 calculate_contrast_operator,calculate_blurriness_steerable)
 
 
 #Functions to be computed measuring the bluriness of the image
@@ -22,8 +24,9 @@ measure_functions = [
     ("blurriness_steerable", calculate_blurriness_steerable)
 ]
 
-#Features to be used in blur model
+# Features to be used in blur model
 feature_list = ['gradient_energy', 'kurt', 'tef', "variance_of_laplacian", "blurriness_fft", "blurriness_wavelet", "contrast_operator", "blurriness_steerable"]
+
 
 def apply_all_measures(df_images):
     """

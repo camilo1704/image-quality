@@ -12,11 +12,11 @@ Output:
 
 To add a new method, add it to utils.image_attributes_score_algorithms and use it in algorithmic_clustering_config
 """
-
-import json
 import os
 import sys
-import os
+import json
+import argparse
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 from src.utils.files import mkdir_p, get_image_paths
@@ -51,7 +51,7 @@ def categorize_images_with_thresholds(attribute_results_float32, thresholds, lab
 
 
 def image_attribute_scores(dataset_image_paths, attribute_name, threshold_labels,
-                     threshold_values, measure_function, output_path, x_limits_for_distribution_graph=None):
+                           threshold_values, measure_function, output_path, x_limits_for_distribution_graph=None):
     """
     Process and categorize attribute images. Create a distribution graph of the attribute
     :param attribute_name: Name of the attribute.
@@ -59,6 +59,7 @@ def image_attribute_scores(dataset_image_paths, attribute_name, threshold_labels
     :param threshold_values: List of threshold values.
     :param measure_function: Function to measure attributes.
     :param output_path: Path for saving results and visualizations.
+    :param x_limits_for_distribution_graph: [left_limit, right_limit] x-axis limits to zoom on the graph
     :return: List of categorized images.
     """
     results = []
@@ -85,16 +86,13 @@ def image_attribute_scores(dataset_image_paths, attribute_name, threshold_labels
                                                 thresholds=threshold_values, labels=threshold_labels)
 
     image_attribute_score_distribution(results_float32, attribute_name=attribute_name, saving_dir=output_path,
-                                     thresholds=threshold_values, labels=threshold_labels,
-                                     xlim=x_limits_for_distribution_graph)
+                                       thresholds=threshold_values, labels=threshold_labels,
+                                       xlim=x_limits_for_distribution_graph)
 
     return degrees
 
 
 if __name__ == '__main__':
-
-    import argparse
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--images_path', type=str,
                         help='Path with all images')

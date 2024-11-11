@@ -49,7 +49,7 @@ def color_histogram_features(image_path, preprocess_img):
     """
     Extract color histogram features from an image.
     :param image_path: Path to the image.
-    :param bins: Tuple specifying histogram bins for each color channel.
+    :param preprocess_img: Placeholder to match parameter requierements for feature extraction
     :return: Flattened color histogram.
     """
     bins = (8, 8, 8)
@@ -74,7 +74,6 @@ def extract_features_vgg19(image_path, preprocess_img):
     with torch.no_grad():
         features = vgg19(image).flatten().cpu().numpy()
     return features
-
 
 
 def extract_features_resnet_50(image_path, preprocess_img):

@@ -1,6 +1,8 @@
 import os
 import errno
 import numpy as np
+from matplotlib import pyplot as plt
+
 
 def list_imgs_files(imgs_path):
     imgs_files = os.listdir(imgs_path)
@@ -29,6 +31,8 @@ def get_image_paths(directory):
     return image_paths
 
     # Convert the data to JSON serializable types
+
+
 def convert_to_serializable(obj):
     if isinstance(obj, np.integer):  # Handle NumPy integers
         return int(obj)
@@ -37,3 +41,10 @@ def convert_to_serializable(obj):
     elif isinstance(obj, np.ndarray):  # Handle NumPy arrays
         return obj.tolist()
     raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+
+def save_graph_and_clear_memory(save_path, save_file_name):
+    mkdir_p(save_path)
+    plt.savefig(os.path.join(save_path, save_file_name))
+    plt.cla()
+    plt.close()
