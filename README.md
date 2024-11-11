@@ -12,8 +12,6 @@ Tag images with **blur**, **dark**, **long**, **black** and **bright** labels.
 Image Processing libraries: Open-cv, PIL, Scipy, skimage.
 ML libraries: sklearn, Pytorch.
 
-## Demo
-
 ## Instalation 
 ### Clone the repository
 git clone https://github.com/camilo1704/image-quality.git
@@ -45,7 +43,7 @@ To train the blur model, 2 folders with blur and normal images need to be provid
 
 ## Usage
 ### Blur Classificator
-python ./src/models/blur_model.py --images_path --save_artifacts_path
+`python ./src/models/blur_model.py --images_path --save_artifacts_path`
 
 ### image tagging
-python ./main.py --images_path --output_path --blur_artifacts_path
+`python ./main.py --images_path --output_path --blur_artifacts_path`
