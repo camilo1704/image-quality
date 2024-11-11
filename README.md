@@ -14,10 +14,10 @@ ML libraries: sklearn, Pytorch.
 
 ## Instalation 
 ### Clone the repository
-git clone https://github.com/camilo1704/image-quality.git
+`git clone https://github.com/camilo1704/image-quality.git`
 
 ### Install dependencies
-pip install -r requirements.txt
+`pip install -r requirements.txt`
 
 ## Project Structure
 - `src/` - Main source code
