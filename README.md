@@ -42,11 +42,13 @@ ML libraries: sklearn, Pytorch.
 To train the blur model, 2 folders with blur and normal images need to be provided. 
 
 ## Usage
-### Blur Classificator
+### Classification
 #### - Train
 `python ./src/models/blur_model_train.py --images_path --save_artifacts_path`
+`python ./src/models/soil_model_train.py --images_path --save_artifacts_path`
 #### - Classify a folder
 `python ./src/models/blur_model.py --images_path --blur_artifacts_path --output_path --save_images`
+`python ./src/models/soil_color_model.py --images_path --soil_color_artifacts_path --output_path --save_images`
 
 ### image tagging
 `python ./main.py --images_path --output_path --blur_artifacts_path`

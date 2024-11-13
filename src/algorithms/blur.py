@@ -2,9 +2,8 @@ import cv2
 import pywt
 import numpy as np
 from joblib import Parallel, delayed
-
 from scipy.linalg import lstsq
-from scipy.stats import entropy, kurtosis
+from scipy.stats import kurtosis
 from skimage.util import view_as_windows
 from scipy.ndimage import convolve, gaussian_filter
 
@@ -185,7 +184,7 @@ def calculate_histogram_entropy(patch, num_bins=20):
 def calculate_blurriness_entropy(image_path, window_size=5, num_bins=20):
     """
     Calculates a single blurriness score for an image based on histogram entropy.
-    :param- image_path: path to image file
+    :param image_path: path to image file
     :param window_size: int, size of the neighborhood window.
     :param num_bins: int, number of bins for the histogram.
     :return blurriness_score: float, the average entropy across all patches as a measure of blurriness.
@@ -247,7 +246,7 @@ def calculate_blurriness_fft(image_path):
 def calculate_blurriness_wavelet(image_path, wavelet='db1'):
     """
     Calculates a blurriness score for an image based on the sum of the wavelet coefficients.
-    :params image_path: path to image file
+    :param image_path: path to image file
     :param wavelet: str, the type of wavelet to use (default is 'db1').
     :returns blurriness_score: float, the sum of the absolute wavelet coefficients in the detail sub-bands.
     """
@@ -270,7 +269,7 @@ def calculate_blurriness_wavelet(image_path, wavelet='db1'):
 def calculate_contrast_operator(image_path, window_size=3):
     """
     Calculates a blurriness score based on Nanda et al.'s contrast operator.
-    :params image_path: path to image file
+    :param image_path: path to image file
     :param window_size: int, the size of the neighborhood window (default is 3x3).
     :return blurriness_score: float, the average contrast across all pixels as a measure of blurriness.
     """
@@ -315,10 +314,11 @@ def calculate_patch_curvature(window):
     curvature_measure = np.abs(coeffs[1]) + np.abs(coeffs[2]) + np.abs(coeffs[3]) + np.abs(coeffs[5])
     return curvature_measure
 
+
 def calculate_blurriness_curvature(image_path, window_size=5, stride=3, num_jobs=-1):
     """
     Calculates a blurriness score based on the curvature operator
-    :params image_path :path to image file
+    :param image_path: path to image file
     :param window_size: int, size of the neighborhood window.
     :param stride: int, the step size for sampling patches.
     :param num_jobs: int, number of parallel jobs (use -1 for all available CPUs).
