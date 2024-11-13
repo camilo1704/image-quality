@@ -13,7 +13,11 @@ def grid_of_cluster_examples(clustering_method, score_or_features_extractor, col
     :param clustering_method: Name of the clustering method used.
     :param score_or_features_extractor: Name of the feature extraction/image attribute score method used.
     :param column_lists: Lists of images for each cluster.
+        format: [["path_to_image1_cluster1.jpg", "path_to_image2_cluster1.jpg"],   # Images for Cluster 1
+                 ["path_to_image1_cluster2.jpg", "path_to_image2_cluster2.jpg"],   # Images for Cluster 2
+                 ["path_to_image1_cluster3.jpg", "path_to_image2_cluster3.jpg"]]   # Images for Cluster 3
     :param column_names: Names of clusters.
+        format: ["Cluster 1", "Cluster 2", "Cluster 3"]
     :param saving_dir: Directory to save the graphs.
     :param number_of_clusters: Total number of clusters.
     :param max_columns_per_image: Maximum number of columns (clusters) per saved image.
