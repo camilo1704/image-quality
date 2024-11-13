@@ -6,7 +6,14 @@ FEATURE_EXTRACTORS used are listed as (name, extractor function from models.feat
 CLUSTERING_METHOD use kmeans by default but could be changed to agglomerative or dbscan
 """
 import torchvision.transforms as transforms
-from models.feature_extractors import *
+from models.feature_extractors import (color_histogram_features,
+                                       extract_features_resnet_50,
+                                       extract_features_resnet_101,
+                                       extract_features_inception,
+                                       extract_features_vgg16,
+                                       extract_features_vgg19,
+                                       extract_features_efficientnet,
+                                       extract_features_swin)
 
 PREPROCESS = transforms.Compose([
     transforms.Resize((224, 224)),
@@ -25,7 +32,7 @@ FEATURE_EXTRACTORS = [
     ("efficientnet", extract_features_efficientnet),
     ("swin", extract_features_swin)
 
-    # Methods that are very slow to be run withou GPU
+    # Methods that are very slow to be run without GPU
     # ("densenet121", extract_features_densenet121),
     # ("densenet201", extract_features_densenet201),
 ]

@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from skimage.measure import shannon_entropy
 
 
 def calculate_dominant_color(image_path):
@@ -124,3 +125,102 @@ def calculate_black_pixel_percentage(image_path):
 def image_aspect_ratio(image_path):
     image = cv2.imread(image_path)
     return np.shape(image)[1] / np.shape(image)[0]
+
+
+def calculate_hue_variability(image_path):
+    image = cv2.imread(image_path)
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    hue_channel = hsv_image[:, :, 0]
+    hue_variability = np.std(hue_channel)
+    return hue_variability
+
+
+def calculate_colorfulness(image_path):
+    image = cv2.imread(image_path)
+    (B, G, R) = cv2.split(image.astype("float"))
+    rg = np.abs(R - G)
+    yb = np.abs(0.5 * (R + G) - B)
+    std_rg = np.std(rg)
+    std_yb = np.std(yb)
+    mean_rg = np.mean(rg)
+    mean_yb = np.mean(yb)
+    colorfulness = np.sqrt(std_rg ** 2 + std_yb ** 2) + 0.3 * np.sqrt(mean_rg ** 2 + mean_yb ** 2)
+    return colorfulness
+
+
+def calculate_color_entropy(image_path):
+    image = cv2.imread(image_path)
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    hist, _ = np.histogram(hsv_image[:, :, 0], bins=180, range=[0, 180])
+    color_entropy = shannon_entropy(hist)
+    return color_entropy
+
+
+def calculate_earth_tones_percentage(image_path):
+    """
+    This metric calculates the proportion of earth tones (e.g., browns, tans, and greens)
+    in an image. Earth tones typically occupy specific ranges in the HSV color space.
+    """
+    image = cv2.imread(image_path)
+    # Convert to HSV color space
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    # Define HSV ranges for earth tones
+    lower_brown = np.array([10, 20, 20])
+    upper_brown = np.array([30, 255, 200])
+    lower_green = np.array([30, 20, 20])
+    upper_green = np.array([85, 255, 200])
+
+    # Create masks for brown and green earth tones
+    brown_mask = cv2.inRange(hsv_image, lower_brown, upper_brown)
+    green_mask = cv2.inRange(hsv_image, lower_green, upper_green)
+    earth_mask = cv2.bitwise_or(brown_mask, green_mask)
+
+    # Calculate percentage of earth tones
+    earth_tones_ratio = np.sum(earth_mask > 0) / (hsv_image.shape[0] * hsv_image.shape[1])
+    return earth_tones_ratio
+
+
+def calculate_brown_spectrum_detection(image_path):
+    """
+    This metric measures the proportion of brown tones in the image, often used to identify earth-like or natural colors.
+    """
+    image = cv2.imread(image_path)
+    # Convert to HSV color space
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    # Define HSV range for brown tones
+    lower_brown = np.array([10, 20, 20])
+    upper_brown = np.array([30, 255, 200])
+
+    # Create mask for brown tones
+    brown_mask = cv2.inRange(hsv_image, lower_brown, upper_brown)
+
+    # Calculate percentage of brown tones
+    brown_ratio = np.sum(brown_mask > 0) / (hsv_image.shape[0] * hsv_image.shape[1])
+    return brown_ratio
+
+
+def calculate_red_spectrum_dominance(image_path):
+    """
+    This metric measures the dominance of red hues in the image. It can be useful for identifying red tones
+    related to vegetation stress or warm tones in artistic photography.
+    """
+    image = cv2.imread(image_path)
+    # Convert to HSV color space
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    # Define HSV range for red tones (both ends of the hue spectrum)
+    lower_red1 = np.array([0, 50, 50])
+    upper_red1 = np.array([10, 255, 255])
+    lower_red2 = np.array([160, 50, 50])
+    upper_red2 = np.array([180, 255, 255])
+
+    # Create mask for red tones
+    red_mask1 = cv2.inRange(hsv_image, lower_red1, upper_red1)
+    red_mask2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+    red_mask = cv2.bitwise_or(red_mask1, red_mask2)
+
+    # Calculate percentage of red tones
+    red_ratio = np.sum(red_mask > 0) / (hsv_image.shape[0] * hsv_image.shape[1])
+    return red_ratio

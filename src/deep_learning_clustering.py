@@ -12,9 +12,10 @@ Output:
 
 To add a new feature extractor model, add it to utils.feature_extractors and use it in deep_learning_clustering_config
 """
-
+import os
 import argparse
-from deep_learning_clustering_config import *
+from deep_learning_clustering_config import CLUSTERING_METHOD, PREPROCESS, FEATURE_EXTRACTORS
+from models.feature_extractors import generic_clustering
 from src.utils.files import mkdir_p
 from src.utils.graphs import grid_of_cluster_examples
 

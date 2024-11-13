@@ -1,26 +1,23 @@
 import os
 import cv2
-from src.utils.files import mkdir_p
+from src.utils.files import save_graph_and_clear_memory
 from random import shuffle
 from matplotlib import pyplot as plt
 import seaborn as sns
 
 
-def save_graph_and_clear_memory(save_path, save_file_name):
-    mkdir_p(save_path)
-    plt.savefig(os.path.join(save_path, save_file_name))
-    plt.cla()
-    plt.close()
-
-
 def grid_of_cluster_examples(clustering_method, score_or_features_extractor, column_lists, column_names, saving_dir,
-                                number_of_clusters, max_columns_per_image=5):
+                             number_of_clusters, max_columns_per_image=5):
     """
     Create a grid of images displaying columns of images for each cluster, split into multiple images if necessary.
     :param clustering_method: Name of the clustering method used.
     :param score_or_features_extractor: Name of the feature extraction/image attribute score method used.
     :param column_lists: Lists of images for each cluster.
+        format: [["path_to_image1_cluster1.jpg", "path_to_image2_cluster1.jpg"],   # Images for Cluster 1
+                 ["path_to_image1_cluster2.jpg", "path_to_image2_cluster2.jpg"],   # Images for Cluster 2
+                 ["path_to_image1_cluster3.jpg", "path_to_image2_cluster3.jpg"]]   # Images for Cluster 3
     :param column_names: Names of clusters.
+        format: ["Cluster 1", "Cluster 2", "Cluster 3"]
     :param saving_dir: Directory to save the graphs.
     :param number_of_clusters: Total number of clusters.
     :param max_columns_per_image: Maximum number of columns (clusters) per saved image.
@@ -72,7 +69,7 @@ def grid_of_cluster_examples(clustering_method, score_or_features_extractor, col
 
 
 def image_attribute_score_distribution(measurements_results, attribute_name, saving_dir,
-                                            thresholds=None, labels=None, xlim=None):
+                                       thresholds=None, labels=None, xlim=None):
     """
     Plots the distribution of attribute measurements with optional red vertical lines for thresholds.
     If xlim is provided, creates two plots: one with and one without the xlim limits.
