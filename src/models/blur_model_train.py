@@ -103,7 +103,7 @@ if __name__ == '__main__':
     save_scaler_path = os.path.join(save_artifacts_path, "scaler.pkl")
     save_model_path = os.path.join(save_artifacts_path, "blur_model.pkl")
 
-    blur_imgs_files = list_imgs_files(os.path.join(imgs_path, "super_blur"))
+    blur_imgs_files = list_imgs_files(os.path.join(imgs_path, "blur"))
     normal_imgs_files = list_imgs_files(os.path.join(imgs_path, "normal"))
 
     labels = [1] * len(blur_imgs_files) + [0] * len(normal_imgs_files)

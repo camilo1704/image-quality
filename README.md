@@ -27,7 +27,7 @@ ML libraries: sklearn, Pytorch.
   - `data_processing/` - Helper functions for data processing
     - `compute_blur.py`
   - `models/` - Model training scripts and feature extraction methods
-    - `blur_model.py`
+    - `blur_model_train.py`
     - `feature_extractors.py`
     - `image_attributes.py`
   - `utils/` - Utility functions
@@ -43,7 +43,10 @@ To train the blur model, 2 folders with blur and normal images need to be provid
 
 ## Usage
 ### Blur Classificator
-`python ./src/models/blur_model.py --images_path --save_artifacts_path`
+#### - Train
+`python ./src/models/blur_model_train.py --images_path --save_artifacts_path`
+#### - Classify a folder
+`python ./src/models/blur_model.py --images_path --blur_artifacts_path --output_path --save_images`
 
 ### image tagging
 `python ./main.py --images_path --output_path --blur_artifacts_path`
