@@ -1,5 +1,5 @@
 from src.utils.files import list_imgs_files, mkdir_p
-from src.data_processing.compute_blur import measure_functions, apply_all_blur_measures
+from src.data_processing.compute_blur import measure_functions, apply_all_measures
 from src.models.training_functions import prepare_dataframe, train_generic_classifier
 import os
 import sys
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     labels = [1] * len(blur_imgs_files) + [0] * len(normal_imgs_files)
     file_names = blur_imgs_files + normal_imgs_files
     df = prepare_dataframe(file_names, labels, classification_name="blur",
-                           feature_function=apply_all_blur_measures)
+                           feature_function=apply_all_measures)
 
     feature_list = [item[0] for item in measure_functions]
 

@@ -1,11 +1,10 @@
 from src.utils.files import list_imgs_files, mkdir_p
-from src.data_processing.compute_soil_color import measure_functions, apply_all_soil_color_measures
+from src.data_processing.compute_soil_color import measure_functions, apply_all_measures
 from src.models.training_functions import prepare_dataframe, train_generic_classifier
 import os
 import sys
 import argparse
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -33,7 +32,7 @@ if __name__ == '__main__':
               [2] * len(not_red_dark_soil_files))
     file_names = red_soil_files + dark_soil_files + not_red_dark_soil_files
     df = prepare_dataframe(file_names, labels, classification_name="soil_color",
-                           feature_function=apply_all_soil_color_measures)
+                           feature_function=apply_all_measures)
 
     feature_list = [item[0] for item in measure_functions]
 

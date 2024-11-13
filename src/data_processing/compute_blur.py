@@ -18,7 +18,7 @@ measure_functions = [
 ]
 
 
-def apply_all_blur_measures(df_images):
+def apply_all_measures(df_images):
     """
     Apply attributes measures to the images
     :param df_images: df with images path as rows
