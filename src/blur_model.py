@@ -4,7 +4,7 @@ Generate a grid with examples of the classifications, a dictionary with the mode
  and optionally folders with all the images in different folders for each class
 """
 from src.data_processing.classification_processing import compute_from_model
-from src.data_processing.compute_blur import measure_functions, apply_all_blur_measures
+from src.data_processing.compute_blur import measure_functions, apply_all_measures
 from src.utils.graphs import grid_of_cluster_examples
 from src.utils.files import (mkdir_p, get_image_paths, convert_to_serializable,
                              organize_images_by_classification, convert_image_dict_to_columns)
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     # Compute results
     feature_list = [item[0] for item in measure_functions]
     blur_dict = compute_from_model(image_paths, blur_artifacts_path, model_classes_name="blur",
-                                   feature_list=feature_list, apply_measures_function=apply_all_blur_measures)
+                                   feature_list=feature_list, apply_measures_function=apply_all_measures)
 
     # Save results dict
     with open(os.path.join(output_path, "blur_dict.json"), "w") as json_file:
