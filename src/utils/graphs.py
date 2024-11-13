@@ -64,7 +64,8 @@ def grid_of_cluster_examples(clustering_method, score_or_features_extractor, col
         plt.tight_layout(rect=[0, 0, 1, 0.95])
 
         # Save the plot with a descriptive filename, including the part number
-        filename = f"{clustering_method.lower()}_{score_or_features_extractor.lower()}_{number_of_clusters}_clusters_partition_part_{part}.jpg"
+        part_name = f"_part_{part}" if num_parts != 1 else ""
+        filename = f"{clustering_method.lower()}_{score_or_features_extractor.lower()}_{number_of_clusters}_clusters_partition{part_name}.jpg"
         save_graph_and_clear_memory(saving_dir, filename)
 
 

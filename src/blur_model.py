@@ -3,7 +3,8 @@ Test the blur model with a directory of images.
 Generate a grid with examples of the classifications, a dictionary with the model results
  and optionally folders with all the images in different folders for each class
 """
-from src.data_processing.compute_blur import compute_blur_from_model
+from src.data_processing.classification_processing import compute_from_model
+from src.data_processing.compute_blur import measure_functions, apply_all_blur_measures
 from src.utils.graphs import grid_of_cluster_examples
 from src.utils.files import (mkdir_p, get_image_paths, convert_to_serializable,
                              organize_images_by_classification, convert_image_dict_to_columns)
@@ -11,8 +12,6 @@ import os
 import sys
 import json
 import argparse
-
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 if __name__ == '__main__':
@@ -31,20 +30,26 @@ if __name__ == '__main__':
     blur_artifacts_path = args.blur_artifacts_path
     output_path = args.output_path
     save_images = args.save_images
-
     images_results_path = os.path.join(os.path.join(output_path, "images_results"))
     mkdir_p(images_results_path)
 
-    blur_dict = compute_blur_from_model(image_paths, blur_artifacts_path)
+    # Compute results
+    feature_list = [item[0] for item in measure_functions]
+    blur_dict = compute_from_model(image_paths, blur_artifacts_path, model_classes_name="blur",
+                                   feature_list=feature_list, apply_measures_function=apply_all_blur_measures)
 
+    # Save results dict
     with open(os.path.join(output_path, "blur_dict.json"), "w") as json_file:
         json.dump(blur_dict, json_file, indent=4, default=convert_to_serializable)
 
-    organize_images_by_classification(image_dict=blur_dict, output_folder=images_results_path,
-                                      property_name='blur', class_names=["not_blur", "blur"])
-
+    # Grid of class examples
     column_lists, column_names = convert_image_dict_to_columns(image_dict=blur_dict,
-                                                               property_name='blur', class_names=["not_blur", "blur"])
+                                                               property_name='blur', class_names=["normal", "blur"])
 
     grid_of_cluster_examples("blur_model", 'blur',
                              column_lists, column_names, saving_dir=output_path, number_of_clusters=2)
+
+    # Save copies of images in class directories
+    if save_images:
+        organize_images_by_classification(image_dict=blur_dict, output_folder=images_results_path,
+                                          property_name='blur', class_names=["normal", "blur"])
